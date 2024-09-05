@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const authMiddleware = (req,res,next) =>{
-  const token = req.header('jwt_token');
+  const token = req.header('token');
   if(!token){
     return res.status(403).json({msg: 'Authorization denied'});
   }

@@ -3,12 +3,14 @@ import bcrypt from 'bcrypt';
 import db from '../db.js';
 import dotenv from 'dotenv';
 import jwtGenerator from '../utils/jwtGenerator.js';
+import validateInputs from '../middleware/validInfo.js';
+import authMiddleware from '../middleware/authorization.js';
 
 dotenv.config();
 const saltRounds = parseInt(process.env.SALT_ROUNDS, 10) || 10;
 const router = express.Router();
 
-router.post('/register', async (req, res) => {
+router.post('/register',validateInputs,async (req, res) => {
   try {
     // 1. Destructure the req.body (name, email, password)
     const { name, email, password } = req.body;
@@ -29,7 +31,8 @@ router.post('/register', async (req, res) => {
       try {
       const newUser =  await db.query('INSERT INTO users (user_name, user_email, user_password) VALUES ($1, $2, $3) RETURNING *', [name, email, hash]);
       const token = jwtGenerator(newUser.rows[0].user_id);
-       res.status(201).send('User registered successfully');
+       //res.status(201).send('User registered successfully');
+       res.json({token});
       } catch (dbErr) {
         console.error('Error storing user in database:', dbErr);
         res.status(500).send('Server Error');
@@ -40,7 +43,7 @@ router.post('/register', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-router.post("/login",async(req,res)=>{
+router.post("/login",validateInputs,async(req,res)=>{
   try{
     const {email, password} = req.body;
     const user = await db.query("SELECT * FROM users WHERE user_email = $1",[
@@ -59,6 +62,15 @@ router.post("/login",async(req,res)=>{
     console.error('Server Error:', err.message);
     res.status(500).send('Server Error');
   }
-})
+});
+router.get('/verify', authMiddleware, async (req, res) => {
+  try {
+    // If the request reaches this point, the token is valid
+    res.json({ valid: true });
+  } catch (err) {
+    console.error('Server Error:', err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 export default router;

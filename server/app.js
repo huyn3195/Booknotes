@@ -1,7 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from "body-parser";
-import jwtAuthRoutes from './routes/jwtAuth.js'
+import jwtAuthRoutes from './routes/jwtAuth.js';
+import dashboardRoutes from './routes/dashboard.js';
 
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(cors());
 
 //register and login routes
 app.use("/auth", jwtAuthRoutes);
+app.use("/dashboard",dashboardRoutes);
 
 const port = process.env.PORT || 3000;
 
