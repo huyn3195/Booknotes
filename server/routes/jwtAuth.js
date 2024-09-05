@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import db from '../db.js';
 import dotenv from 'dotenv';
+import jwtGenerator from '../utils/jwtGenerator.js';
 
 dotenv.config();
 const saltRounds = parseInt(process.env.SALT_ROUNDS, 10) || 10;
@@ -26,8 +27,9 @@ router.post('/register', async (req, res) => {
       }
 
       try {
-        await db.query('INSERT INTO users (user_name, user_email, user_password) VALUES ($1, $2, $3) RETURNING *"', [name, email, hash]);
-        res.status(201).send('User registered successfully');
+      const newUser =  await db.query('INSERT INTO users (user_name, user_email, user_password) VALUES ($1, $2, $3) RETURNING *', [name, email, hash]);
+      const token = jwtGenerator(newUser.rows[0].user_id);
+       res.status(201).send('User registered successfully');
       } catch (dbErr) {
         console.error('Error storing user in database:', dbErr);
         res.status(500).send('Server Error');
@@ -38,5 +40,25 @@ router.post('/register', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+router.post("/login",async(req,res)=>{
+  try{
+    const {email, password} = req.body;
+    const user = await db.query("SELECT * FROM users WHERE user_email = $1",[
+      email
+    ]);
+    if(user.rows.length===0){
+      return res.status(401).send("User doesn't exist");
+    }
+    const validPassword = bcrypt.compare(password,user.rows[0].user_password);
+    if(!validPassword){
+      return res.status(401).send("Password or Email is incorrect");
+    }
+    const token = jwtGenerator(user.rows[0].user_id);
+    res.json({token});
+  }catch (err) {
+    console.error('Server Error:', err.message);
+    res.status(500).send('Server Error');
+  }
+})
 
 export default router;
