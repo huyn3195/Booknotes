@@ -52,7 +52,7 @@ router.post("/login",validateInputs,async(req,res)=>{
     if(user.rows.length===0){
       return res.status(401).send("User doesn't exist");
     }
-    const validPassword = bcrypt.compare(password,user.rows[0].user_password);
+    const validPassword = await bcrypt.compare(password,user.rows[0].user_password);
     if(!validPassword){
       return res.status(401).send("Password or Email is incorrect");
     }
