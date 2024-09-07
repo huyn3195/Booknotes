@@ -8,4 +8,4 @@ function Dashboard({setAuth}){
     </Fragment>
   )
 }
-export default Dashboard
+export default Dashboard;

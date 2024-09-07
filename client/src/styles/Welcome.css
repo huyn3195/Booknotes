@@ -1,0 +1,20 @@
+/* CSS styles */
+.cover-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  padding: 3rem;
+}
+
+.inner.cover {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 20vh; /* Move main content down by 20% of viewport height */
+}
+
+.mastfoot {
+  margin-top: auto; /* Push footer to bottom */
+}

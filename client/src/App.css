@@ -1,0 +1,116 @@
+/* Basic reset for margins and paddings */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container style for central alignment */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+}
+
+/* Global text styles */
+h1, h2, h3 {
+  font-family: 'Arial', sans-serif;
+  color: #333;
+}
+
+p {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  color: #666;
+}
+
+/* Link styles */
+a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Form container styles */
+form {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+form h1 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-align: center;
+  color: #333;
+}
+
+/* Input fields styling */
+input[type="text"], input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Button styling */
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+/* Navigation link styling */
+nav {
+  margin-bottom: 20px;
+}
+
+nav a {
+  margin: 0 10px;
+  color: #007bff;
+}
+
+nav a:hover {
+  color: #0056b3;
+}
+
+/* Welcome page style */
+.welcome-page {
+  text-align: center;
+}
+
+.welcome-page h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+.welcome-page p {
+  font-size: 18px;
+  color: #555;
+}
