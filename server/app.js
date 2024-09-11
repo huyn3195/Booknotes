@@ -3,6 +3,7 @@ import cors from 'cors';
 import bodyParser from "body-parser";
 import jwtAuthRoutes from './routes/jwtAuth.js';
 import dashboardRoutes from './routes/dashboard.js';
+import boooksRoutes from'./routes/books.js';
 import { fileURLToPath } from 'url'; 
 import path from 'path';
 
@@ -20,6 +21,7 @@ app.use(cors());
 //register and login routes
 app.use("/auth", jwtAuthRoutes);
 app.use("/dashboard",dashboardRoutes);
+app.use("/books",boooksRoutes)
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build', 'index.html')); // Serve the React app

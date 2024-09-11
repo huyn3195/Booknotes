@@ -15,8 +15,11 @@ class User{
     return result.rows[0];
   }
   static async comparePassword(enteredPassword, storedPassword){
-    return await bcrypt.compare(enteredPassword,storePassword);
+    return await bcrypt.compare(enteredPassword,storedPassword);
   }
-    
+    static async findByUser(user_id){
+      const result = await db.query('SELECT * FROM users WHERE user_id =$1',[user_id]);
+      return result.rows[0];
+    }
 }
 export default User;
