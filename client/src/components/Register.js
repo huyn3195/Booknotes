@@ -80,7 +80,7 @@ function Register({ setAuth }) {
                             value={name}
                             onChange={onChange}
                           />
-                          <label className="form-label" htmlFor="name">Your Name</label>
+                         
                         </div>
                       </div>
 
@@ -96,7 +96,7 @@ function Register({ setAuth }) {
                             value={email}
                             onChange={onChange}
                           />
-                          <label className="form-label" htmlFor="email">Your Email</label>
+                          
                         </div>
                       </div>
 
@@ -112,7 +112,7 @@ function Register({ setAuth }) {
                             value={password}
                             onChange={onChange}
                           />
-                          <label className="form-label" htmlFor="password">Password</label>
+                        
                         </div>
                       </div>
 
@@ -121,7 +121,15 @@ function Register({ setAuth }) {
                           Register
                         </button>
                         <div className="text-center">
-                          <p>Already have an account? <a href="/login" onClick={redirectToLogin}></a> Login here </p>
+                          <p>
+                            Already have an account?{" "}
+                            <a href="/login" onClick={(e) => { 
+                               e.preventDefault(); // Prevent the default anchor behavior
+                               redirectToLogin();  // Use the redirect function to navigate
+                                 }}>
+                               Login here
+                            </a>
+                          </p>
                         </div>
                       </div>
                     </form>
