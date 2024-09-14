@@ -8,10 +8,26 @@ export const findBooks = async (req, res) => {
       `https://openlibrary.org/search.json?q=${query}`
     );
     const data = apiResponse.data;
+
     if (data.docs.length === 0) {
       return res.status(404).json({ message: "No books found" });
     }
-    return res.json(data.docs);
+
+    // Add cover URLs to the books
+    const booksWithCovers = data.docs.map((book) => {
+      // Check if the book has an ISBN to use for the cover
+      const isbn = book.isbn ? book.isbn[0] : null;
+      let coverUrl = null;
+      if (isbn) {
+        // Generate the cover URL using the Open Library API
+        coverUrl = `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`; // Using 'M' for medium size
+      }
+      return {
+        ...book,
+        coverUrl,
+      };
+    });
+    return res.json(booksWithCovers);
   } catch (err) {
     console.error("Server Error:", err.message);
     res.status(500).send("Server Error");
