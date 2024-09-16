@@ -1,12 +1,14 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import _ from "lodash";
 
-function SearchResults() {
+function SearchResults({ setAuth }) {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
   const location = useLocation();
   const query = new URLSearchParams(location.search).get("query");
 
@@ -35,6 +37,16 @@ function SearchResults() {
       setLoading(false);
     }
   };
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setAuth(false);
+    navigate("/login");
+  };
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+    navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+  };
 
   const debouncedFetchBooks = _.debounce((query, page) => {
     fetchBooks(query, page);
@@ -56,35 +68,59 @@ function SearchResults() {
   };
 
   return (
-    <div className="container mt-5">
-      <h2>Search Results</h2>
-      {loading && <p>Loading...</p>}
-      {books.length > 0 ? (
-        <ul className="list-unstyled">
-          {books.map((book, index) => (
-            <li key={index} className="media mb-4">
-              <img
-                src={book.coverUrl}
-                className="mr-3"
-                alt={book.title}
-                style={{ width: "100px" }}
-              />
-              <div className="media-body">
-                <h5 className="mt-0 mb-1">{book.title}</h5>
-                <p>by {book.author_name}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        !loading && <p>No books found.</p>
-      )}
-      {hasMore && !loading && (
-        <button onClick={loadMore} className="btn btn-primary">
-          Load More
+    <Fragment>
+      <nav className="navbar navbar-light bg-light justify-content-between">
+        <a className="navbar-brand">Dashboard</a>
+        <form className="form-inline" onSubmit={handleSearch}>
+          <input
+            className="form-control mr-sm-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button
+            className="btn btn-outline-success my-2 my-sm-0"
+            type="submit"
+          >
+            Search
+          </button>
+        </form>
+        <button onClick={handleLogout} className="btn btn-danger">
+          Logout
         </button>
-      )}
-    </div>
+      </nav>
+      <div className="container mt-5" style={{ marginTop: "75px" }}>
+        <h2>Search Results</h2>
+        {loading && <p>Loading...</p>}
+        {books.length > 0 ? (
+          <ul className="list-unstyled">
+            {books.map((book, index) => (
+              <li key={index} className="media mb-4">
+                <img
+                  src={book.coverUrl}
+                  className="mr-3"
+                  alt={book.title}
+                  style={{ width: "100px" }}
+                />
+                <div className="media-body">
+                  <h5 className="mt-0 mb-1">{book.title}</h5>
+                  <p>by {book.author_name}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          !loading && <p>No books found.</p>
+        )}
+        {hasMore && !loading && (
+          <button onClick={loadMore} className="btn btn-primary">
+            Load More
+          </button>
+        )}
+      </div>
+    </Fragment>
   );
 }
 
