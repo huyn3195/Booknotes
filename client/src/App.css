@@ -20,13 +20,15 @@
 }
 
 /* Global text styles */
-h1, h2, h3 {
-  font-family: 'Arial', sans-serif;
+h1,
+h2,
+h3 {
+  font-family: "Arial", sans-serif;
   color: #333;
 }
 
 p {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   font-size: 16px;
   color: #666;
 }
@@ -60,7 +62,8 @@ form h1 {
 }
 
 /* Input fields styling */
-input[type="text"], input[type="password"] {
+input[type="text"],
+input[type="password"] {
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
