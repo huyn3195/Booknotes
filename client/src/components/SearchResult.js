@@ -37,6 +37,7 @@ function SearchResults({ setAuth }) {
       setLoading(false);
     }
   };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     setAuth(false);
@@ -45,6 +46,9 @@ function SearchResults({ setAuth }) {
 
   const handleSearch = (event) => {
     event.preventDefault();
+    setBooks([]); // Clear previous search results
+    setPage(1); // Reset to first page
+    setHasMore(true); // Reset hasMore flag
     navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
   };
 
@@ -53,8 +57,11 @@ function SearchResults({ setAuth }) {
   }, 300);
 
   useEffect(() => {
-    setBooks([]);
-    setHasMore(true);
+    if (query) {
+      setBooks([]);
+      setHasMore(true);
+      setPage(1); // Reset page when a new search query is entered
+    }
   }, [query]);
 
   useEffect(() => {
@@ -91,7 +98,7 @@ function SearchResults({ setAuth }) {
           Logout
         </button>
       </nav>
-      <div className="container mt-5" style={{ marginTop: "75px" }}>
+      <div className="container mt-5">
         <h2>Search Results</h2>
         {loading && <p>Loading...</p>}
         {books.length > 0 ? (

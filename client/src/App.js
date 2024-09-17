@@ -58,7 +58,10 @@ function App() {
             />
             <Route path="/" element={<Welcome />} />
             <Route path="/about" element={<About />} />
-            <Route path="/search" element={<SearchResults />} />
+            <Route
+              path="/search"
+              element={<SearchResults setAuth={setAuth} />}
+            />
           </Routes>
         </div>
       </Router>
