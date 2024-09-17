@@ -4,7 +4,7 @@ import User from "../models/userModel.js";
 
 export const getUserProfile = async (req, res) => {
   try {
-    const user_id = req.user.user_id;
+    const user_id = req.user;
     // Fetch user profile information (e.g., username)
     const result = await User.findByUser(user_id);
 
@@ -19,7 +19,7 @@ export const getUserProfile = async (req, res) => {
 };
 export const getUserBooks = async (req, res) => {
   try {
-    const user_id = req.user.user_id; // Use user_id from req.user object
+    const user_id = req.user; // Use user_id from req.user object
     const userBooks = await Books.findUserBooks(user_id);
     return res.json(userBooks);
   } catch (err) {
@@ -29,19 +29,9 @@ export const getUserBooks = async (req, res) => {
 };
 export const getUserPosts = async (req, res) => {
   try {
-    const user_id = req.user.user_id;
+    const user_id = req.user;
     const userPosts = await Post.findUserPosts(user_id);
     res.json(userPosts);
-  } catch (err) {
-    console.error("Server Error", err.message);
-    res.status(500).send("Server Error");
-  }
-};
-export const getFeed = async (req, res) => {
-  try {
-    const user_id = req.user.user_id;
-    const feed = await Post.findFeed(user_id);
-    res.json(feed);
   } catch (err) {
     console.error("Server Error", err.message);
     res.status(500).send("Server Error");

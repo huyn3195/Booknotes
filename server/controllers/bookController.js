@@ -36,7 +36,9 @@ export const findBooks = async (req, res) => {
 export const saveBook = async (req, res) => {
   try {
     const { isbn, title, author, cover_id, review, rating } = req.body;
-    const user_id = req.user_id;
+    const user_id = req.user; // Verify this is correctly populated
+    console.log("User ID:", user_id); // Debugging line to check user_id value
+
     const savedBook = await Books.saveBook(
       isbn,
       title,
@@ -46,14 +48,16 @@ export const saveBook = async (req, res) => {
       rating,
       user_id
     );
-    return res.status(201).send(savedBook);
+    return res.status(201).json(savedBook); // Return JSON response
   } catch (err) {
-    console.error("Server Error", err.message);
+    console.error("Server Error:", err.message);
+    res.status(500).send("Server Error");
   }
 };
+
 export const getUserBooks = async (req, res) => {
   try {
-    const user_id = req.user.id;
+    const user_id = req.user;
     const userBooks = await Books.findUserBooks(user_id);
     return res.json(userBooks);
   } catch (err) {
