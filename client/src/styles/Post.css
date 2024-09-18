@@ -1,0 +1,56 @@
+/* Styles for the Post component */
+.post-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Full viewport height */
+  padding: 0 20px; /* Optional padding */
+}
+
+.post-form {
+  width: 100%;
+  max-width: 600px; /* Maximum width of the form */
+  background-color: #f9f9f9; /* Light background for the form */
+  padding: 20px;
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px; /* Rounded corners for input and textarea */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+textarea {
+  resize: vertical; /* Allow vertical resizing only */
+  min-height: 100px; /* Minimum height for textarea */
+}
+
+.submit-button {
+  background-color: #007bff; /* Primary button color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}

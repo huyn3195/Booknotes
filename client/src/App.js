@@ -5,15 +5,17 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import Login from "./components/Login.js";
-import Register from "./components/Register.js";
-import Dashboard from "./components/Dashboard.js";
-import Welcome from "./components/Welcome.js";
-import About from "./components/About.js";
-import SearchResults from "./components/SearchResult.js";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import Dashboard from "./components/Dashboard";
+import Welcome from "./components/Welcome";
+import About from "./components/About";
+import SearchResults from "./components/SearchResult";
+import Post from "./components/Post";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   const setAuth = (boolean) => {
     setIsAuthenticated(boolean);
   };
@@ -23,7 +25,6 @@ function App() {
       <Router>
         <div className="container">
           <Routes>
-            {/* Conditionally render the Login component or redirect to Dashboard */}
             <Route
               path="/login"
               element={
@@ -34,7 +35,6 @@ function App() {
                 )
               }
             />
-            {/* Register route */}
             <Route
               path="/register"
               element={
@@ -45,7 +45,6 @@ function App() {
                 )
               }
             />
-            {/* Conditionally render the Dashboard component or redirect to Login */}
             <Route
               path="/dashboard"
               element={
@@ -61,6 +60,16 @@ function App() {
             <Route
               path="/search"
               element={<SearchResults setAuth={setAuth} />}
+            />
+            <Route
+              path="/post"
+              element={
+                isAuthenticated ? (
+                  <Post setAuth={setAuth} />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
             />
           </Routes>
         </div>

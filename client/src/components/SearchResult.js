@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import _ from "lodash";
 
 function SearchResults({ setAuth }) {
@@ -77,7 +77,9 @@ function SearchResults({ setAuth }) {
   return (
     <Fragment>
       <nav className="navbar navbar-light bg-light justify-content-between">
-        <a className="navbar-brand">Dashboard</a>
+        <Link to="/dashboard" className="navbar-brand">
+          Dashboard
+        </Link>
         <form className="form-inline" onSubmit={handleSearch}>
           <input
             className="form-control mr-sm-2"

@@ -54,6 +54,9 @@ function Dashboard({ setAuth }) {
     event.preventDefault();
     navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
   };
+  const handlePost = () => {
+    navigate("/post");
+  };
 
   return (
     <Fragment>
@@ -76,6 +79,9 @@ function Dashboard({ setAuth }) {
             Search
           </button>
         </form>
+        <button onClick={handlePost} className="btn btn-primary">
+          Post
+        </button>
         <button onClick={handleLogout} className="btn btn-danger">
           Logout
         </button>
