@@ -8,36 +8,49 @@ function Dashboard({ setAuth }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchUserData();
-    fetchUserBooks();
-  }, []);
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchUserData(token);
+      fetchUserBooks(token);
+    } else {
+      navigate("/login");
+    }
+  }, [navigate]);
 
-  const fetchUserData = async () => {
+  const fetchUserData = async (token) => {
     try {
       const response = await fetch("http://localhost:3000/dashboard", {
-        headers: { token: localStorage.getItem("token") },
+        headers: { token: token },
       });
       if (response.ok) {
         const data = await response.json();
         setUserData(data);
       } else {
-        console.error("Failed to fetch user data");
+        console.error("Failed to fetch user data. Status:", response.status);
+        if (response.status === 401) {
+          // Unauthorized
+          handleLogout();
+        }
       }
     } catch (err) {
       console.error("Fetch error:", err.message);
     }
   };
 
-  const fetchUserBooks = async () => {
+  const fetchUserBooks = async (token) => {
     try {
-      const response = await fetch("http://localhost:3000/books", {
-        headers: { token: localStorage.getItem("token") },
+      const response = await fetch("http://localhost:3000/books/mybooks", {
+        headers: { token: token },
       });
       if (response.ok) {
         const data = await response.json();
         setUserBooks(data);
       } else {
-        console.error("Failed to fetch user books");
+        console.error("Failed to fetch user books. Status:", response.status);
+        if (response.status === 401) {
+          // Unauthorized
+          handleLogout();
+        }
       }
     } catch (err) {
       console.error("Fetch error:", err.message);
@@ -54,13 +67,13 @@ function Dashboard({ setAuth }) {
     event.preventDefault();
     navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
   };
+
   const handlePost = () => {
     navigate("/post");
   };
 
   return (
     <Fragment>
-      {/* Navigation Bar */}
       <nav className="navbar navbar-light bg-light justify-content-between">
         <a className="navbar-brand">Dashboard</a>
         <form className="form-inline" onSubmit={handleSearch}>
@@ -87,7 +100,6 @@ function Dashboard({ setAuth }) {
         </button>
       </nav>
 
-      {/* Main Dashboard Section */}
       <section className="vh-100" style={{ backgroundColor: "#eee" }}>
         <div className="container h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
@@ -115,7 +127,7 @@ function Dashboard({ setAuth }) {
                                 ))}
                               </ul>
                             ) : (
-                              <p>You have no books saved.</p>
+                              <p>Read more and save more!!!!!</p>
                             )}
                           </div>
                         </div>
@@ -126,7 +138,7 @@ function Dashboard({ setAuth }) {
 
                     <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
                       <img
-                        src="https://img.buzzfeed.com/buzzfeed-static/static/2017-03/23/15/asset/buzzfeed-prod-fastlane-01/sub-buzz-27949-1490298158-6.jpg"
+                        src="https://ih1.redbubble.net/image.2066877613.0598/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"
                         className="img-fluid"
                         alt="Dashboard"
                       />

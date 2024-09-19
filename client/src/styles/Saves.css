@@ -1,0 +1,35 @@
+/* Save.css */
+.book-cover {
+  width: 150px;
+  height: auto;
+}
+
+.book-info {
+  padding-left: 20px;
+}
+
+.rightSide {
+  padding-left: 20px;
+}
+
+.star-rating {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.star {
+  font-size: 2rem;
+  color: #d3d3d3; /* Light grey for unfilled stars */
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.star.filled {
+  color: #ffcc00; /* Yellow for filled stars */
+}
+
+.star:hover,
+.star:hover ~ .star {
+  color: #ffcc00; /* Yellow for stars on hover */
+}

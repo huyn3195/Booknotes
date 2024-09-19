@@ -12,6 +12,7 @@ import Welcome from "./components/Welcome";
 import About from "./components/About";
 import SearchResults from "./components/SearchResult";
 import Post from "./components/Post";
+import Save from "./components/Save";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -71,6 +72,12 @@ function App() {
                 )
               }
             />
+            <Route
+              path="/save"
+              element={isAuthenticated ? <Save /> : <Navigate to="/login" />}
+            >
+              ;
+            </Route>
           </Routes>
         </div>
       </Router>

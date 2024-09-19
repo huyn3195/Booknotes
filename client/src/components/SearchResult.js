@@ -60,7 +60,7 @@ function SearchResults({ setAuth }) {
     if (query) {
       setBooks([]);
       setHasMore(true);
-      setPage(1); // Reset page when a new search query is entered
+      setPage(1);
     }
   }, [query]);
 
@@ -72,6 +72,17 @@ function SearchResults({ setAuth }) {
 
   const loadMore = () => {
     setPage((prevPage) => prevPage + 1);
+  };
+
+  const handleSave = (book) => {
+    navigate("/save", {
+      state: {
+        isbn: book.isbn && book.isbn.length > 0 ? book.isbn[0] : "N/A",
+        title: book.title,
+        author_name: book.author_name,
+        coverUrl: book.coverUrl,
+      },
+    });
   };
 
   return (
@@ -116,6 +127,16 @@ function SearchResults({ setAuth }) {
                 <div className="media-body">
                   <h5 className="mt-0 mb-1">{book.title}</h5>
                   <p>by {book.author_name}</p>
+                  <p>
+                    ISBN{" "}
+                    {book.isbn && book.isbn.length > 0 ? book.isbn[0] : "N/A"}
+                    <button
+                      onClick={() => handleSave(book)}
+                      className="btn btn-primary float-right"
+                    >
+                      Save
+                    </button>
+                  </p>
                 </div>
               </li>
             ))}
