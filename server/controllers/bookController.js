@@ -35,15 +35,15 @@ export const findBooks = async (req, res) => {
 };
 export const saveBook = async (req, res) => {
   try {
-    const { isbn, title, author, cover_id, review, rating } = req.body;
+    const { book_isbn, title, author, cover_url, review, rating } = req.body;
     const user_id = req.user; // Verify this is correctly populated
     console.log("User ID:", user_id); // Debugging line to check user_id value
 
     const savedBook = await Books.saveBook(
-      isbn,
+      book_isbn,
       title,
       author,
-      cover_id,
+      cover_url,
       review,
       rating,
       user_id

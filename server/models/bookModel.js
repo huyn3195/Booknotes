@@ -5,17 +5,17 @@ class Books {
     book_isbn,
     title,
     author,
-    cover_id,
+    cover_url,
     review,
     rating,
     user_id
   ) {
     const time = new Date();
     const result = await db.query(
-      `INSERT INTO books (book_isbn, title, author,cover_id ,review, rating, time, user_id) 
+      `INSERT INTO books (book_isbn, title, author, cover_url ,review, rating, time, user_id) 
   VALUES ($1, $2, $3, $4, $5, $6, $7,$8) 
   RETURNING *`,
-      [book_isbn, title, author, cover_id, review, rating, time, user_id]
+      [book_isbn, title, author, cover_url, review, rating, time, user_id]
     );
     return result.rows[0];
   }
