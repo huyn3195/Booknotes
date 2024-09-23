@@ -1,0 +1,21 @@
+.icon-arrow-left,
+.icon-arrow-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  cursor: pointer;
+  color: #000;
+}
+
+.icon-arrow-left {
+  left: -30px;
+}
+
+.icon-arrow-right {
+  right: -30px;
+}
+
+.card.position-relative {
+  position: relative;
+}

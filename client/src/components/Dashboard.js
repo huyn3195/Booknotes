@@ -1,10 +1,15 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import "../styles/Dashboard.css";
 
 function Dashboard({ setAuth }) {
   const [userData, setUserData] = useState(null);
   const [userBooks, setUserBooks] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -12,6 +17,7 @@ function Dashboard({ setAuth }) {
     if (token) {
       fetchUserData(token);
       fetchUserBooks(token);
+      fetchUserPosts(token);
     } else {
       navigate("/login");
     }
@@ -57,6 +63,50 @@ function Dashboard({ setAuth }) {
     }
   };
 
+  const fetchUserPosts = async (token) => {
+    try {
+      const response = await fetch("http://localhost:3000/post/userposts", {
+        headers: { token: token },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setUserPosts(data);
+      } else {
+        console.error("Failed to fetch user posts. Status:", response.status);
+        if (response.status === 401) {
+          // Unauthorized
+          handleLogout();
+        }
+      }
+    } catch (err) {
+      console.error("Fetch error:", err.message);
+    }
+  };
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3000/post/delete/${id}`, {
+        method: "DELETE",
+        headers: { token: localStorage.getItem("token") },
+      });
+      if (response.ok) {
+        const updatedPosts = userPosts.filter((post) => post.post_id !== id);
+        setUserPosts(updatedPosts);
+
+        // Update currentCardIndex if necessary
+        if (currentCardIndex >= updatedPosts.length) {
+          // If the current index is out of bounds, reset to the last index or to 0
+          setCurrentCardIndex(
+            updatedPosts.length > 0 ? updatedPosts.length - 1 : 0
+          );
+        }
+      } else {
+        console.error("Failed to delete post. Status:", response.status);
+      }
+    } catch (err) {
+      console.error("Deletion error:", err.message);
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     setAuth(false);
@@ -66,6 +116,18 @@ function Dashboard({ setAuth }) {
   const handleSearch = (event) => {
     event.preventDefault();
     navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+  };
+
+  const nextCard = () => {
+    setCurrentCardIndex((prevIndex) =>
+      prevIndex === userPosts.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const prevCard = () => {
+    setCurrentCardIndex((prevIndex) =>
+      prevIndex === 0 ? userPosts.length - 1 : prevIndex - 1
+    );
   };
 
   const handlePost = () => {
@@ -130,6 +192,45 @@ function Dashboard({ setAuth }) {
                               <p>Read more and save more!!!!!</p>
                             )}
                           </div>
+
+                          {userPosts.length > 0 ? (
+                            <div
+                              className="card position-relative"
+                              style={{ width: "18rem" }}
+                            >
+                              <div className="card-body text-center">
+                                <h5 className="card-title">
+                                  {userPosts[currentCardIndex].book_title}
+                                </h5>
+                                <p className="card-text">
+                                  {userPosts[currentCardIndex].content}
+                                </p>
+                                <button
+                                  onClick={() =>
+                                    handleDelete(
+                                      userPosts[currentCardIndex].post_id
+                                    )
+                                  }
+                                  className="btn btn-danger"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+
+                              <FontAwesomeIcon
+                                icon={faArrowLeft}
+                                className="icon-arrow-left"
+                                onClick={prevCard}
+                              />
+                              <FontAwesomeIcon
+                                icon={faArrowRight}
+                                className="icon-arrow-right"
+                                onClick={nextCard}
+                              />
+                            </div>
+                          ) : (
+                            <p>Post here</p>
+                          )}
                         </div>
                       ) : (
                         <p>Loading...</p>
