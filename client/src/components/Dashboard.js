@@ -117,6 +117,9 @@ function Dashboard({ setAuth }) {
     event.preventDefault();
     navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
   };
+  const handleFeed = () => {
+    navigate("/feed");
+  };
 
   const nextCard = () => {
     setCurrentCardIndex((prevIndex) =>
@@ -154,9 +157,13 @@ function Dashboard({ setAuth }) {
             Search
           </button>
         </form>
+        <button onClick={handleFeed} className="btn btn-primary">
+          Feed
+        </button>
         <button onClick={handlePost} className="btn btn-primary">
           Post
         </button>
+
         <button onClick={handleLogout} className="btn btn-danger">
           Logout
         </button>
