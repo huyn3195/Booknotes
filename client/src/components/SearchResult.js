@@ -94,7 +94,6 @@ function SearchResults({ setAuth }) {
         handleLogout={handleLogout}
       />
       <div className="container mt-5">
-        <h2>Search Results</h2>
         {loading && <p>Loading...</p>}
         {books.length > 0 ? (
           <ul className="list-unstyled">
