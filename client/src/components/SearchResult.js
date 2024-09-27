@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import _ from "lodash";
+import Navbar from "./NavBar.js"; // Adjust the import path based on your file structure
 
 function SearchResults({ setAuth }) {
   const [books, setBooks] = useState([]);
@@ -69,11 +70,9 @@ function SearchResults({ setAuth }) {
       debouncedFetchBooks(query, page);
     }
   }, [query, page]);
-
   const loadMore = () => {
     setPage((prevPage) => prevPage + 1);
   };
-
   const handleSave = (book) => {
     navigate("/save", {
       state: {
@@ -84,33 +83,16 @@ function SearchResults({ setAuth }) {
       },
     });
   };
-
   return (
     <Fragment>
-      <nav className="navbar navbar-light bg-light justify-content-between">
-        <Link to="/dashboard" className="navbar-brand">
-          Dashboard
-        </Link>
-        <form className="form-inline" onSubmit={handleSearch}>
-          <input
-            className="form-control mr-sm-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button
-            className="btn btn-outline-success my-2 my-sm-0"
-            type="submit"
-          >
-            Search
-          </button>
-        </form>
-        <button onClick={handleLogout} className="btn btn-danger">
-          Logout
-        </button>
-      </nav>
+      <Navbar
+        handleSearch={handleSearch}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        handleFeed={() => navigate("/feed")} // Example feed handler
+        handlePost={() => navigate("/post")} // Example post handler
+        handleLogout={handleLogout}
+      />
       <div className="container mt-5">
         <h2>Search Results</h2>
         {loading && <p>Loading...</p>}
@@ -153,5 +135,4 @@ function SearchResults({ setAuth }) {
     </Fragment>
   );
 }
-
 export default SearchResults;

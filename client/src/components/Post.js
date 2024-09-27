@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "../styles/Post.css"; // Import the CSS file for styling
+import Navbar from "./NavBar.js";
 
 function Post({ setAuth }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -62,31 +63,14 @@ function Post({ setAuth }) {
 
   return (
     <Fragment>
-      <nav className="navbar navbar-light bg-light justify-content-between">
-        <Link to="/dashboard" className="navbar-brand">
-          Dashboard
-        </Link>
-        <form className="form-inline" onSubmit={handleSearch}>
-          <input
-            className="form-control mr-sm-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button
-            className="btn btn-outline-success my-2 my-sm-0"
-            type="submit"
-          >
-            Search
-          </button>
-        </form>
-        <button onClick={handleLogout} className="btn btn-danger">
-          Logout
-        </button>
-      </nav>
-
+      <Navbar
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        handleSearch={handleSearch}
+        handleLogout={handleLogout}
+        handleFeed={() => navigate("/feed")} // Example feed handler
+        handlePost={() => navigate("/post")}
+      />
       <div className="post-container">
         <h1>Create a Post</h1>
         <form onSubmit={onSubmitForm} className="post-form">

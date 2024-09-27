@@ -1,9 +1,9 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import "../styles/Dashboard.css";
-
+import PostCard from "./PostCard.js";
+import BookList from "./BookList.js";
+import Navbar from "./NavBar";
 function Dashboard({ setAuth }) {
   const [userData, setUserData] = useState(null);
   const [userBooks, setUserBooks] = useState([]);
@@ -11,7 +11,6 @@ function Dashboard({ setAuth }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const navigate = useNavigate();
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -22,7 +21,6 @@ function Dashboard({ setAuth }) {
       navigate("/login");
     }
   }, [navigate]);
-
   const fetchUserData = async (token) => {
     try {
       const response = await fetch("http://localhost:3000/dashboard", {
@@ -32,17 +30,12 @@ function Dashboard({ setAuth }) {
         const data = await response.json();
         setUserData(data);
       } else {
-        console.error("Failed to fetch user data. Status:", response.status);
-        if (response.status === 401) {
-          // Unauthorized
-          handleLogout();
-        }
+        handleUnauthorized(response);
       }
     } catch (err) {
       console.error("Fetch error:", err.message);
     }
   };
-
   const fetchUserBooks = async (token) => {
     try {
       const response = await fetch("http://localhost:3000/books/mybooks", {
@@ -52,17 +45,12 @@ function Dashboard({ setAuth }) {
         const data = await response.json();
         setUserBooks(data);
       } else {
-        console.error("Failed to fetch user books. Status:", response.status);
-        if (response.status === 401) {
-          // Unauthorized
-          handleLogout();
-        }
+        handleUnauthorized(response);
       }
     } catch (err) {
       console.error("Fetch error:", err.message);
     }
   };
-
   const fetchUserPosts = async (token) => {
     try {
       const response = await fetch("http://localhost:3000/post/userposts", {
@@ -72,14 +60,17 @@ function Dashboard({ setAuth }) {
         const data = await response.json();
         setUserPosts(data);
       } else {
-        console.error("Failed to fetch user posts. Status:", response.status);
-        if (response.status === 401) {
-          // Unauthorized
-          handleLogout();
-        }
+        handleUnauthorized(response);
       }
     } catch (err) {
       console.error("Fetch error:", err.message);
+    }
+  };
+
+  const handleUnauthorized = (response) => {
+    console.error("Failed to fetch. Status:", response.status);
+    if (response.status === 401) {
+      handleLogout();
     }
   };
   const handleDelete = async (id) => {
@@ -91,10 +82,7 @@ function Dashboard({ setAuth }) {
       if (response.ok) {
         const updatedPosts = userPosts.filter((post) => post.post_id !== id);
         setUserPosts(updatedPosts);
-
-        // Update currentCardIndex if necessary
         if (currentCardIndex >= updatedPosts.length) {
-          // If the current index is out of bounds, reset to the last index or to 0
           setCurrentCardIndex(
             updatedPosts.length > 0 ? updatedPosts.length - 1 : 0
           );
@@ -106,7 +94,6 @@ function Dashboard({ setAuth }) {
       console.error("Deletion error:", err.message);
     }
   };
-
   const handleLogout = () => {
     localStorage.removeItem("token");
     setAuth(false);
@@ -120,55 +107,30 @@ function Dashboard({ setAuth }) {
   const handleFeed = () => {
     navigate("/feed");
   };
-
   const nextCard = () => {
     setCurrentCardIndex((prevIndex) =>
       prevIndex === userPosts.length - 1 ? 0 : prevIndex + 1
     );
   };
-
   const prevCard = () => {
     setCurrentCardIndex((prevIndex) =>
       prevIndex === 0 ? userPosts.length - 1 : prevIndex - 1
     );
   };
-
   const handlePost = () => {
     navigate("/post");
   };
 
   return (
     <Fragment>
-      <nav className="navbar navbar-light bg-light justify-content-between">
-        <a className="navbar-brand">Dashboard</a>
-        <form className="form-inline" onSubmit={handleSearch}>
-          <input
-            className="form-control mr-sm-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button
-            className="btn btn-outline-success my-2 my-sm-0"
-            type="submit"
-          >
-            Search
-          </button>
-        </form>
-        <button onClick={handleFeed} className="btn btn-primary">
-          Feed
-        </button>
-        <button onClick={handlePost} className="btn btn-primary">
-          Post
-        </button>
-
-        <button onClick={handleLogout} className="btn btn-danger">
-          Logout
-        </button>
-      </nav>
-
+      <Navbar
+        handleSearch={handleSearch}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        handleFeed={handleFeed}
+        handlePost={handlePost}
+        handleLogout={handleLogout}
+      />
       <section className="vh-100" style={{ backgroundColor: "#eee" }}>
         <div className="container h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
@@ -182,59 +144,18 @@ function Dashboard({ setAuth }) {
                           <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
                             Welcome, {userData.user_name}
                           </p>
-                          <div className="mt-4">
-                            <h3>Your Books:</h3>
-                            {userBooks.length > 0 ? (
-                              <ul>
-                                {userBooks.map((book, index) => (
-                                  <li key={index}>
-                                    <p>
-                                      <strong>{book.title}</strong> by{" "}
-                                      {book.author}
-                                    </p>
-                                  </li>
-                                ))}
-                              </ul>
-                            ) : (
-                              <p>Read more and save more!!!!!</p>
-                            )}
-                          </div>
-
+                          <BookList books={userBooks} />
                           {userPosts.length > 0 ? (
-                            <div
-                              className="card position-relative"
-                              style={{ width: "18rem" }}
-                            >
-                              <div className="card-body text-center">
-                                <h5 className="card-title">
-                                  {userPosts[currentCardIndex].book_title}
-                                </h5>
-                                <p className="card-text">
-                                  {userPosts[currentCardIndex].content}
-                                </p>
-                                <button
-                                  onClick={() =>
-                                    handleDelete(
-                                      userPosts[currentCardIndex].post_id
-                                    )
-                                  }
-                                  className="btn btn-danger"
-                                >
-                                  Delete
-                                </button>
-                              </div>
-
-                              <FontAwesomeIcon
-                                icon={faArrowLeft}
-                                className="icon-arrow-left"
-                                onClick={prevCard}
-                              />
-                              <FontAwesomeIcon
-                                icon={faArrowRight}
-                                className="icon-arrow-right"
-                                onClick={nextCard}
-                              />
-                            </div>
+                            <PostCard
+                              post={userPosts[currentCardIndex]}
+                              onDelete={() =>
+                                handleDelete(
+                                  userPosts[currentCardIndex].post_id
+                                )
+                              }
+                              onNext={nextCard}
+                              onPrev={prevCard}
+                            />
                           ) : (
                             <p>Post here</p>
                           )}
@@ -243,7 +164,6 @@ function Dashboard({ setAuth }) {
                         <p>Loading...</p>
                       )}
                     </div>
-
                     <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
                       <img
                         src="https://ih1.redbubble.net/image.2066877613.0598/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"
@@ -261,5 +181,4 @@ function Dashboard({ setAuth }) {
     </Fragment>
   );
 }
-
 export default Dashboard;
