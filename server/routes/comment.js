@@ -6,6 +6,6 @@ import {
 import authMiddleware from "../middleware/authorization.js";
 const router = express.Router();
 
-router.post("/create", authMiddleware, createComment);
+router.post("/create/:post_id", authMiddleware, createComment);
 router.delete("/delete/:id", authMiddleware, deleteComment);
 export default router;

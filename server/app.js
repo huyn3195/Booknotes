@@ -6,6 +6,7 @@ import dashboardRoutes from "./routes/dashboard.js";
 import boooksRoutes from "./routes/books.js";
 import postRoutes from "./routes/post.js";
 import commentRoutes from "./routes/comment.js";
+import friendRoutes from "./routes/friend.js";
 import { fileURLToPath } from "url";
 import path from "path";
 
@@ -26,6 +27,7 @@ app.use("/dashboard", dashboardRoutes);
 app.use("/books", boooksRoutes);
 app.use("/post", postRoutes);
 app.use("/comment", commentRoutes);
+app.use("/friend", friendRoutes);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build", "index.html")); // Serve the React app

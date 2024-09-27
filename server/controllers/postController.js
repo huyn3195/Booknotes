@@ -32,3 +32,13 @@ export const deletePost = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+export const getFeed = async (req, res) => {
+  try {
+    const user_id = req.user;
+    const feed = await Post.getFeed(user_id);
+    res.json(feed);
+  } catch (err) {
+    console.error("Server Error", err.message);
+    res.status(500).send("Server Error");
+  }
+};

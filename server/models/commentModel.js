@@ -22,5 +22,12 @@ class Comment {
     );
     return result.rows;
   }
+  static async getCommentsByPostId(post_id) {
+    const result = await db.query(
+      "SELECT * FROM comments WHERE post_id = $1 ORDER BY time ASC",
+      [post_id]
+    );
+    return result.rows;
+  }
 }
 export default Comment;

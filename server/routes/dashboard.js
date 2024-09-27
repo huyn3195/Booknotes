@@ -1,6 +1,11 @@
 import express from "express";
 import db from "../db.js";
 import authMiddleware from "../middleware/authorization.js";
+import {
+  getUserProfile,
+  getUserBooks,
+  getUserPosts,
+} from "../controllers/dashboardController.js";
 
 const router = express.Router();
 
@@ -8,8 +13,6 @@ router.get("/", authMiddleware, async (req, res) => {
   try {
     // Extract user ID from req.user
     const userId = req.user;
-
-    // Query the database for the user's name
     const result = await db.query(
       "SELECT user_name FROM users WHERE user_id = $1",
       [userId]
