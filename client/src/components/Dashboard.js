@@ -4,6 +4,7 @@ import "../styles/Dashboard.css";
 import PostCard from "./PostCard.js";
 import BookList from "./BookList.js";
 import Navbar from "./NavBar";
+
 function Dashboard({ setAuth }) {
   const [userData, setUserData] = useState(null);
   const [userBooks, setUserBooks] = useState([]);
@@ -11,6 +12,7 @@ function Dashboard({ setAuth }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const navigate = useNavigate();
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -20,7 +22,26 @@ function Dashboard({ setAuth }) {
     } else {
       navigate("/login");
     }
+
+    // Load Botpress chatbot scripts
+    const script1 = document.createElement("script");
+    script1.src = "https://cdn.botpress.cloud/webchat/v2.1/inject.js";
+    script1.async = true;
+    document.body.appendChild(script1);
+
+    const script2 = document.createElement("script");
+    script2.src =
+      "https://mediafiles.botpress.cloud/d3aa6ca5-393a-4832-9ce6-bd9aa8fb5b24/webchat/v2.1/config.js";
+    script2.async = true;
+    document.body.appendChild(script2);
+
+    // Cleanup scripts on component unmount
+    return () => {
+      document.body.removeChild(script1);
+      document.body.removeChild(script2);
+    };
   }, [navigate]);
+
   const fetchUserData = async (token) => {
     try {
       const response = await fetch("http://localhost:3000/dashboard", {
@@ -36,6 +57,7 @@ function Dashboard({ setAuth }) {
       console.error("Fetch error:", err.message);
     }
   };
+
   const fetchUserBooks = async (token) => {
     try {
       const response = await fetch("http://localhost:3000/books/mybooks", {
@@ -51,6 +73,7 @@ function Dashboard({ setAuth }) {
       console.error("Fetch error:", err.message);
     }
   };
+
   const fetchUserPosts = async (token) => {
     try {
       const response = await fetch("http://localhost:3000/post/userposts", {
@@ -73,6 +96,7 @@ function Dashboard({ setAuth }) {
       handleLogout();
     }
   };
+
   const handleDelete = async (id) => {
     try {
       const response = await fetch(`http://localhost:3000/post/delete/${id}`, {
@@ -94,6 +118,7 @@ function Dashboard({ setAuth }) {
       console.error("Deletion error:", err.message);
     }
   };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     setAuth(false);
@@ -104,19 +129,23 @@ function Dashboard({ setAuth }) {
     event.preventDefault();
     navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
   };
+
   const handleFeed = () => {
     navigate("/feed");
   };
+
   const nextCard = () => {
     setCurrentCardIndex((prevIndex) =>
       prevIndex === userPosts.length - 1 ? 0 : prevIndex + 1
     );
   };
+
   const prevCard = () => {
     setCurrentCardIndex((prevIndex) =>
       prevIndex === 0 ? userPosts.length - 1 : prevIndex - 1
     );
   };
+
   const handlePost = () => {
     navigate("/post");
   };
@@ -181,4 +210,5 @@ function Dashboard({ setAuth }) {
     </Fragment>
   );
 }
+
 export default Dashboard;
