@@ -83,6 +83,9 @@ function SearchResults({ setAuth }) {
       },
     });
   };
+  const handleFriend = () => {
+    navigate("/friend");
+  };
   return (
     <Fragment>
       <Navbar
@@ -92,6 +95,7 @@ function SearchResults({ setAuth }) {
         handleFeed={() => navigate("/feed")} // Example feed handler
         handlePost={() => navigate("/post")} // Example post handler
         handleLogout={handleLogout}
+        handleFriend={handleFriend}
       />
       <div className="container mt-5">
         {loading && <p>Loading...</p>}

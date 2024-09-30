@@ -14,6 +14,7 @@ import SearchResults from "./components/SearchResult";
 import Post from "./components/Post";
 import Save from "./components/Save";
 import Feed from "./components/Feed";
+import Friends from "./components/Friends";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -82,6 +83,10 @@ function App() {
             <Route
               path="/feed"
               element={isAuthenticated ? <Feed /> : <Navigate to="/login" />}
+            ></Route>
+            <Route
+              path="/friend"
+              element={isAuthenticated ? <Friends /> : <Navigate to="/login" />}
             ></Route>
           </Routes>
         </div>

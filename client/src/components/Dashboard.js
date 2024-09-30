@@ -149,6 +149,9 @@ function Dashboard({ setAuth }) {
   const handlePost = () => {
     navigate("/post");
   };
+  const handleFriend = () => {
+    navigate("/friend");
+  };
 
   return (
     <Fragment>
@@ -159,6 +162,7 @@ function Dashboard({ setAuth }) {
         handleFeed={handleFeed}
         handlePost={handlePost}
         handleLogout={handleLogout}
+        handleFriend={handleFriend}
       />
       <section className="vh-100" style={{ backgroundColor: "#eee" }}>
         <div className="container h-100">

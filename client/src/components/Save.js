@@ -6,7 +6,6 @@ function Save() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Destructure the passed data from location.state
   const { isbn, title, author_name, coverUrl } = location.state || {};
 
   const [rating, setRating] = useState(0);

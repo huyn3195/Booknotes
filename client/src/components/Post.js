@@ -28,7 +28,9 @@ function Post({ setAuth }) {
     event.preventDefault();
     navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
   };
-
+  const handleFriend = () => {
+    navigate("/friend");
+  };
   async function onSubmitForm(event) {
     event.preventDefault();
     if (!book_title || !content) {
@@ -70,6 +72,7 @@ function Post({ setAuth }) {
         handleLogout={handleLogout}
         handleFeed={() => navigate("/feed")} // Example feed handler
         handlePost={() => navigate("/post")}
+        handleFriend={handleFriend}
       />
       <div className="post-container">
         <h1>Create a Post</h1>

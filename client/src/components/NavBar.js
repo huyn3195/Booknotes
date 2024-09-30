@@ -1,6 +1,8 @@
 // Navbar.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserFriends } from "@fortawesome/free-solid-svg-icons";
 
 function Navbar({
   handleSearch,
@@ -9,6 +11,7 @@ function Navbar({
   handleFeed,
   handlePost,
   handleLogout,
+  handleFriend,
 }) {
   const navigate = useNavigate();
 
@@ -35,6 +38,14 @@ function Navbar({
         </button>
       </form>
       <div className="d-flex">
+        <button
+          onClick={handleFriend}
+          className="btn btn-light mx-2"
+          aria-label="Friends"
+          title="Friends"
+        >
+          <FontAwesomeIcon icon={faUserFriends} size="lg" />
+        </button>
         <button onClick={handleFeed} className="btn btn-primary mx-1">
           Feed
         </button>

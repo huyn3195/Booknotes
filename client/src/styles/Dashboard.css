@@ -19,3 +19,22 @@
 .card.position-relative {
   position: relative;
 }
+/* Dashboard.css */
+.sidebar {
+  height: 100vh; /* Full height */
+  position: fixed; /* Stay fixed on the left */
+  top: 0;
+  left: 0;
+  background-color: #343a40; /* Dark background */
+  padding: 1rem; /* Add some padding */
+  width: 280px; /* Adjust the width */
+  color: white;
+}
+
+.sidebar .dropdown-menu {
+  background-color: #343a40; /* Dropdown color matches sidebar */
+}
+
+.sidebar .form-control {
+  margin-bottom: 1rem;
+}

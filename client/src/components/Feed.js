@@ -94,6 +94,9 @@ function Feed({ setAuth }) {
       console.error("Error submitting comment:", err.message);
     }
   };
+  const handleFriend = () => {
+    navigate("/friend");
+  };
 
   return (
     <Fragment>
@@ -103,6 +106,7 @@ function Feed({ setAuth }) {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         handleLogout={handleLogout}
+        handleFriend={handleFriend}
       />
       <div className="feed">
         <h1>Your Feed</h1>
