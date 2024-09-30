@@ -1,15 +1,15 @@
-# My Awesome Project
-Write a short sentence or two about this project and what it does. Be sure to include a link and a screenshot (we're front end devs so we can actually see our work!).
+# Bookstagram
+A Social Media revolves around books
 
 **Link to project:** http://recruiters-love-seeing-live-demos.com/
 
-![alt tag](http://placecorgi.com/1200/650)
+
 
 ## How It's Made:
 
-**Tech used:** HTML, CSS, JavaScript, Framework of choice
+**Tech used:** PERN Stack, Redux, HTML, CSS, Botpress
 
-Here's where you can go to town on how you actually built this thing. Write as much as you can here, it's totally fine if it's not too much just make sure you write *something*. If you don't have too much experience on your resume working on the front end that's totally fine. This is where you can really show off your passion and make up for that ten fold.
+I used Postgre as my Database, NodeJS and Express for my server and React for my frontend. I am planning to host this app on Heroky. I built a chatbot using Botpress to help with book recommendation
 
 ## Optimizations
 *(optional)*
