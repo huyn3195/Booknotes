@@ -1,5 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import "../styles/Dashboard.css";
 
 function Friends({ setAuth }) {
@@ -7,13 +9,15 @@ function Friends({ setAuth }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]); // Store search results
   const [searchPerformed, setSearchPerformed] = useState(false); // Track if search was performed
-
+  const [sentRequests, setSentRequests] = useState([]);
+  const [receivedRequests, setReceivedRequests] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       fetchUserData(token);
+      fetchUserRequests(token);
     } else {
       navigate("/login");
     }
@@ -77,6 +81,21 @@ function Friends({ setAuth }) {
       setSearchResults([]); // Clear search results if the input is empty
     }
   };
+  const fetchUserRequests = async (token) => {
+    try {
+      const response = await fetch("http://localhost:3000/friend/getrequests", {
+        headers: { token: token },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setReceivedRequests(data);
+      } else {
+        handleUnauthorized(response);
+      }
+    } catch (err) {
+      console.error("Fetch error:", err.message);
+    }
+  };
 
   const handleFeed = () => {
     navigate("/feed");
@@ -94,6 +113,52 @@ function Friends({ setAuth }) {
 
   const goToDashboard = () => {
     navigate("/dashboard");
+  };
+
+  const sendFriendRequest = async (friend_id) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/friend/sendrequest/${friend_id}`,
+        {
+          method: "POST",
+          headers: { token: localStorage.getItem("token") },
+        }
+      );
+      if (response.ok) {
+        alert("Friend request sent successfully");
+        setSentRequests([...sentRequests, friend_id]);
+      } else {
+        console.error("Failed to send friend request");
+      }
+    } catch (err) {
+      console.error("Error sending friend request:", err.message);
+    }
+  };
+  const acceptFriendRequest = async (friend_id) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/friend/acceptrequest/${friend_id}`,
+        {
+          method: "POST",
+          headers: { token: localStorage.getItem("token") },
+        }
+      );
+    } catch (err) {
+      console.error("Error accepting friend request:", err.message);
+    }
+  };
+  const rejectFriendRequest = async (friend_id) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/friend/rejectrequest/${friend_id}`,
+        {
+          method: "POST",
+          headers: { token: localStorage.getItem("token") },
+        }
+      );
+    } catch (err) {
+      console.error("Error rejecting friend request:", err.message);
+    }
   };
 
   return (
@@ -132,8 +197,28 @@ function Friends({ setAuth }) {
           {searchPerformed && searchResults.length > 0 && (
             <ul className="list-group">
               {searchResults.map((user) => (
-                <li key={user.id} className="list-group-item">
+                <li
+                  key={user.user_id}
+                  className="list-group-item d-flex justify-content-between align-items-center"
+                >
                   {user.user_name}
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => sendFriendRequest(user.user_id)}
+                    disabled={sentRequests.includes(user.user_id)} // Disable the button if the request has been sent
+                  >
+                    <FontAwesomeIcon
+                      icon={
+                        sentRequests.includes(user.user_id)
+                          ? "check"
+                          : faUserPlus
+                      } // Change icon to check if the request has been sent
+                      className="me-3"
+                    />
+                    {sentRequests.includes(user.user_id)
+                      ? "Request Sent"
+                      : "Add Friend"}
+                  </button>
                 </li>
               ))}
             </ul>
@@ -166,12 +251,12 @@ function Friends({ setAuth }) {
             aria-labelledby="dropdownUser1"
           >
             <li>
-              <a className="dropdown-item" href="#" onClick={goToDashboard}>
+              <a className="dropdown-item" onClick={goToDashboard}>
                 Dashboard
               </a>
             </li>
             <li>
-              <a className="dropdown-item" href="#" onClick={handleFeed}>
+              <a className="dropdown-item" onClick={handleFeed}>
                 Feed
               </a>
             </li>
@@ -191,8 +276,36 @@ function Friends({ setAuth }) {
           </ul>
         </div>
       </div>
+      <div className="friend-requests-section">
+        <h3>Friend Requests</h3>
+        {receivedRequests.length > 0 ? (
+          <ul className="list-group">
+            {receivedRequests.map((request) => (
+              <li
+                key={request.user_id}
+                className="list-group-item d-flex justify-content-between align-items-center"
+              >
+                {request.user_name}
+                <button
+                  className="btn btn-primary ms-2"
+                  onClick={() => acceptFriendRequest(request.user_id)}
+                >
+                  Accept
+                </button>
+                <button
+                  className="btn btn-danger ms-2"
+                  onClick={() => rejectFriendRequest(request.user_id)}
+                >
+                  Reject
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No friend requests</p>
+        )}
+      </div>
     </Fragment>
   );
 }
-
 export default Friends;
