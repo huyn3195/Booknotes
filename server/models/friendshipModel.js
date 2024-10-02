@@ -22,30 +22,36 @@ class Friendship {
     const time = new Date();
     const updateResult = await db.query(
       `UPDATE friendships
-     SET status = 'accepted', updated_at = $1
-     WHERE sender_id = $2 AND receiver_id = $3 AND status = 'pending'
-     RETURNING *;`[(time, sender_id, receiver_id)]
+       SET status = 'accepted', updated_at = $1
+       WHERE sender_id = $2 AND receiver_id = $3 AND status = 'pending'
+       RETURNING *;`,
+      [time, sender_id, receiver_id]
     );
+
     const acceptedRequest = updateResult.rows[0];
     if (!acceptedRequest) {
       throw new Error("Friend request not found or already accepted");
     }
     return acceptedRequest;
   }
+
   static async rejectFriendRequest(sender_id, receiver_id) {
     const time = new Date();
     const updateResult = await db.query(
       `UPDATE friendships
-     SET status = 'rejected', updated_at = $1
-     WHERE sender_id = $2 AND receiver_id = $3 AND status = 'pending'
-     RETURNING *;`[(time, sender_id, receiver_id)]
+       SET status = 'rejected', updated_at = $1
+       WHERE sender_id = $2 AND receiver_id = $3 AND status = 'pending'
+       RETURNING *;`,
+      [time, sender_id, receiver_id] // Use square brackets for parameterized queries
     );
+
     const rejectedRequest = updateResult.rows[0];
     if (!rejectedRequest) {
       throw new Error("Friend request not found or already rejected");
     }
     return rejectedRequest;
   }
+
   static async getFriends(user_id) {
     const result = await db.query(
       `SELECT u.* FROM users u
@@ -58,12 +64,13 @@ class Friendship {
   }
   static async getFriendRequests(user_id) {
     const result = await db.query(
-      `SELECT u.* FROM users u
-      JOIN friendships f ON (u.user_id = f.sender_id OR u.user_id = f.receiver_id)
-      WHERE (f.receiver_id = $1) AND f.status = 'pending';`,
-      [user_id]
+      `SELECT u.user_id, u.user_name 
+       FROM users u
+       JOIN friendships f ON u.user_id = f.sender_id
+       WHERE f.receiver_id = $1 AND f.status = 'pending';`,
+      [user_id] // This is the ID of the logged-in user (the receiver)
     );
-    return result.rows;
+    return result.rows; // This will return the list of senders' user_id and user_name.
   }
 }
 export default Friendship;

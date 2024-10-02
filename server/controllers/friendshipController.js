@@ -1,7 +1,7 @@
 import Friendship from "../models/friendshipModel.js";
 import User from "../models/userModel.js";
 
-export const sendFriendRequest = async (req, res) => {
+export const send = async (req, res) => {
   const sender_id = req.user;
   const receiver_id = req.params.id;
   try {
@@ -15,7 +15,7 @@ export const sendFriendRequest = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
-export const acceptFriendRequest = async (req, res) => {
+export const accept = async (req, res) => {
   const receiver_id = req.user; // Assuming the logged-in user is the receiver
   const sender_id = req.params.id; // The ID of the user who sent the request
   try {
@@ -31,7 +31,7 @@ export const acceptFriendRequest = async (req, res) => {
 };
 
 // Reject Friend Request
-export const rejectFriendRequest = async (req, res) => {
+export const reject = async (req, res) => {
   const receiver_id = req.user; // Assuming the logged-in user is the receiver
   const sender_id = req.params.id; // The ID of the user who sent the request
   try {
@@ -46,7 +46,7 @@ export const rejectFriendRequest = async (req, res) => {
   }
 };
 
-export const getFriendRequests = async (req, res) => {
+export const getRequests = async (req, res) => {
   const user_id = req.user; // Assuming the logged-in user is the one receiving requests
   try {
     const friendRequests = await Friendship.getFriendRequests(user_id);
