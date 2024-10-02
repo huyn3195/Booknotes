@@ -1,4 +1,4 @@
-<img width="1439" alt="Screenshot 2024-10-02 at 11 06 29 AM" src="https://github.com/user-attachments/assets/91921d91-b416-4891-8524-c89ffe46f433"># Bookstagram
+# Bookstagram
 A Social Media revolves around books
 
 ## How It's Made:
@@ -36,7 +36,7 @@ Implement Redis caching to improve the loading speed and use optimized query cal
 <img width="1435" alt="Screenshot 2024-10-02 at 11 08 44 AM" src="https://github.com/user-attachments/assets/3c299c41-1251-4a70-a4ec-6c906af74864">
 **User dashboard:**
 <img width="1368" alt="Screenshot 2024-10-02 at 11 09 19 AM" src="https://github.com/user-attachments/assets/9c6ae72b-fefa-40c9-9d1e-427c168af6fb">
-**Book searching: **
+**Book searching:**
 <img width="1439" alt="Screenshot 2024-10-02 at 11 11 39 AM" src="https://github.com/user-attachments/assets/ee99f44b-dfbf-4582-a2bf-63676d745a3d">
 
 
