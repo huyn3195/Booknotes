@@ -22,3 +22,9 @@ Implement Redis caching to improve the loading speed and use optimized query cal
 - cd to client
 - npm i
 - npm run build
+
+## Picture:
+**Home page:** 
+<img width="1440" alt="Screenshot 2024-10-02 at 11 05 03 AM" src="https://github.com/user-attachments/assets/c07ad635-7dee-4af2-9aa9-957ec4698c01">
+
+
